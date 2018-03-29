@@ -11,7 +11,7 @@
 
 import {MyRank} from "../share/myrank";
 
-export interface onSegRanks{
+export interface onRank{
     /**
      * The float of the nowplayers.
      *

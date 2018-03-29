@@ -39,7 +39,7 @@ export interface onAdd{
 
 
 
-export interface onSegRanks{
+export interface onRank{
     /**
      * The float of the nowplayers.
      *
