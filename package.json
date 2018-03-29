@@ -1,0 +1,17 @@
+{
+  "name": "pinus-parse-interface",
+  "version": "0.0.1",
+  "dependencies": {
+    "@types/node": "^9.6.1",
+    "typescript": "^2.8.1",
+    "typescript-json-schema": "^0.21.0"
+  },
+  "main": "./dist/main",
+  "types": "./src/main",
+  "scripts": {
+    "build": "tsc"
+  },
+  "devDependencies": {
+    "ts-node": "^5.0.1"
+  }
+}
