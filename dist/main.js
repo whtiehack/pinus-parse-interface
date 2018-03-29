@@ -52,12 +52,6 @@ function parseFile(baseDir, filename) {
     return parseSymbol(symbol, symbol, messages);
     //   return transMessage(obj,messages);
 }
-function transMessage(obj, messages) {
-    for (const name in messages) {
-        obj['message ' + name] = messages[name];
-    }
-    return obj;
-}
 const PROTOBUF_TYPES = [
     "uInt32",
     "sInt32",

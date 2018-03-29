@@ -1,7 +1,11 @@
 
-## parse interface to pinus-protobuf JSON
+####  parse interface to pinus-protobuf JSON 
+
+#### auto generate `serverProtos.json`,`clientProtos.json`.
 
 
+
+it can also be used on the `pomelo-protobuf` declaration file(serverProtos.json,clientProtos.json).
 ```
 
 export interface rank_PlayerHandler_beginGame{
@@ -113,3 +117,4 @@ const main = require('pinus-parse-interface');
 const test = main.parseToPinusProtobuf('path_to_you_interface_dir');
 console.log('result',JSON.stringify(test,null,4));
 ```
+

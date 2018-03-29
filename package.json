@@ -1,6 +1,6 @@
 {
   "name": "pinus-parse-interface",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dependencies": {
     "@types/node": "^9.6.1",
     "typescript": "^2.8.1",
@@ -11,8 +11,8 @@
     "type": "git",
     "url": "https://github.com/whtiehack/pinus-parse-interface.git"
   },
-  "main": "./dist/main",
-  "types": "./src/main",
+  "main": "./dist/index",
+  "types": "./src/index",
   "scripts": {
     "build": "tsc"
   },

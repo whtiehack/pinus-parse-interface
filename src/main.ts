@@ -59,12 +59,7 @@ function parseFile(baseDir:string,filename:string){
  //   return transMessage(obj,messages);
 }
 
-function transMessage(obj,messages:object){
-    for(const name in messages){
-        obj['message '+name] = messages[name];
-    }
-    return obj;
-}
+
 
 interface IProp{
     $ref?:string;
@@ -72,10 +67,7 @@ interface IProp{
     additionalProperties?:string;
     items:{type?:string;$ref?:string};
 }
-interface ISymbolParseRet{
-    key:string;
-    value:object;
-}
+
 const PROTOBUF_TYPES = [
     "uInt32",
     "sInt32",
