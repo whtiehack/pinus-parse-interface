@@ -6,11 +6,22 @@
     "typescript": "^2.8.1",
     "typescript-json-schema": "^0.21.0"
   },
+  "homepage": "https://github.com/whtiehack/pinus-parse-interface",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/whtiehack/pinus-parse-interface.git"
+  },
   "main": "./dist/main",
   "types": "./src/main",
   "scripts": {
     "build": "tsc"
   },
+  "keywords": [
+    "pinus",
+    "interface",
+    "json",
+    "parser"
+  ],
   "devDependencies": {
     "ts-node": "^5.0.1"
   }
