@@ -99,3 +99,17 @@ pinus: https://github.com/node-pinus/pinus
 ## install
 
 `npm install pinus-parse-interface`
+
+or
+
+`yarn add pinus-parse-interface`
+
+
+## usage
+
+```
+const main = require('pinus-parse-interface');
+
+const test = main.parseToPinusProtobuf('path_to_you_interface_dir');
+console.log('result',JSON.stringify(test,null,4));
+```
