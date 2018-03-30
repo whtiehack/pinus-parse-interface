@@ -1,11 +1,40 @@
 
 ####  parse TS interface to pinus-protobuf JSON 
 解析  ts 的interface 到 pinus-protobuf用的 json格式。
-#### auto generate `serverProtos.json`,`clientProtos.json`.
 
 
+
+pinus: https://github.com/node-pinus/pinus
+
+
+## install
+
+`npm install pinus-parse-interface`
+
+or
+
+`yarn add pinus-parse-interface`
+
+
+## usage
+
+```
+const main = require('pinus-parse-interface');
+
+const test = main.parseToPinusProtobuf('path_to_you_interface_dir');
+console.log('result',JSON.stringify(test,null,4));
+```
+
+
+
+#### auto generate 
+`serverProtos.json`,`clientProtos.json`.
+
+### example
 
 it can also be used on the `pomelo-protobuf` declaration file(serverProtos.json,clientProtos.json).
+
+input
 ```
 
 export interface rank_PlayerHandler_beginGame{
@@ -63,7 +92,7 @@ export interface onRank{
 
 
 
-to 
+output
 
 ```
 {
@@ -94,27 +123,5 @@ to
         "required uInt32 currank": 2
     }
 }
-```
-
-
-pinus: https://github.com/node-pinus/pinus
-
-
-## install
-
-`npm install pinus-parse-interface`
-
-or
-
-`yarn add pinus-parse-interface`
-
-
-## usage
-
-```
-const main = require('pinus-parse-interface');
-
-const test = main.parseToPinusProtobuf('path_to_you_interface_dir');
-console.log('result',JSON.stringify(test,null,4));
 ```
 
