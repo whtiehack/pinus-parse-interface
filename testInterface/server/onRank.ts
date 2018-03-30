@@ -21,6 +21,12 @@ interface IFF{
     aa?:IGG[];
 }
 
+enum EnumTest{
+    AA,
+    BB,
+    CC
+}
+
 export interface onRank extends IFF,IGG{
     /**
      * The float of the nowplayers.
@@ -29,7 +35,10 @@ export interface onRank extends IFF,IGG{
      * @TJS-type array
      */
     normalArr:number[];
-
+    /**
+     * @TJS-type uInt32
+     */
+    enum:EnumTest;
     normalStrArr:string[];
     innerGGG?:GGG;
     ranks:MyRank[];

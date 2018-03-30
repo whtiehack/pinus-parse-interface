@@ -149,6 +149,17 @@ function parseSymbol(root, symbol, messages) {
     function parseRef(obj, key, $ref) {
         const definition = getDefinitionFromRoot(root, $ref);
         const name = definition.name;
+        if (definition.enum) {
+            if (!definition.type) {
+                console.log(obj, key, $ref, definition, name);
+                throw new Error('!! un know enum type');
+            }
+            let type = definition.type;
+            if (type == 'number' || type == 'boolean') {
+                type = 'uInt32';
+            }
+            return ' ' + type + ' ' + key;
+        }
         if (!messages[name]) {
             messages[name] = parseSymbol(root, definition, messages);
         }
@@ -170,7 +181,12 @@ function parseSymbol(root, symbol, messages) {
         // 判断类型  type items additionalProperties
         if (prop.type != 'array') {
             if (prop.$ref) {
-                msgkey += parseRef(val, key, prop.$ref);
+                if (prop.type) {
+                    msgkey += ' ' + normalType(prop.type) + ' ' + key;
+                }
+                else {
+                    msgkey += parseRef(val, key, prop.$ref);
+                }
             }
             else {
                 msgkey += ' ' + normalType(prop.type) + ' ' + key;

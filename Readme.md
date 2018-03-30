@@ -1,6 +1,6 @@
 
-####  parse interface to pinus-protobuf JSON 
-
+####  parse TS interface to pinus-protobuf JSON 
+解析  ts 的interface 到 pinus-protobuf用的 json格式。
 #### auto generate `serverProtos.json`,`clientProtos.json`.
 
 
