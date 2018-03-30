@@ -9,9 +9,19 @@
 //     "repeated Array ranks": 1
 // },
 
-import {MyRank} from "../share/myrank";
+import {GGG, MyRank} from "../share/myrank";
 
-export interface onRank{
+
+interface IGG{
+    ggenv?:string[];
+}
+
+interface IFF{
+    ffname:string;
+    aa?:IGG[];
+}
+
+export interface onRank extends IFF,IGG{
     /**
      * The float of the nowplayers.
      *
@@ -21,7 +31,7 @@ export interface onRank{
     normalArr:number[];
 
     normalStrArr:string[];
-
+    innerGGG?:GGG;
     ranks:MyRank[];
     rk?:MyRank;
     val?:number;

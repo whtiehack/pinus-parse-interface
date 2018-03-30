@@ -20,7 +20,8 @@
     "pinus",
     "interface",
     "json",
-    "parser"
+    "parser",
+    "protobuf"
   ],
   "devDependencies": {
     "ts-node": "^5.0.1"
