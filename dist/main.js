@@ -13,8 +13,12 @@ function error(msg, ...args) {
     console.error(str);
     throw new Error(str);
 }
-function parseToPinusProtobuf(baseDir) {
-    let retObj = {};
+let responseStr = '_Res';
+let requestStr = '_Req';
+function parseToPinusProtobuf(baseDir, reqStr = '_Req', resStr = '_Res') {
+    responseStr = resStr;
+    requestStr = reqStr;
+    let retObj = { client: {}, server: {} };
     const files = fs.readdirSync(baseDir);
     files.forEach(val => {
         if (!val.endsWith('.ts')) {
@@ -22,7 +26,8 @@ function parseToPinusProtobuf(baseDir) {
         }
         const obj = parseFile(baseDir, val);
         const tmp = path.parse(val);
-        retObj[tmp.name] = obj;
+        retObj.client[tmp.name] = obj.client;
+        retObj.server[tmp.name] = obj.server;
     });
     return retObj;
 }
@@ -43,13 +48,38 @@ function parseFile(baseDir, filename) {
     if (!symbols || !symbols.length) {
         return;
     }
-    const symbolName = symbols[symbols.length - 1];
-    if (!symbolName) {
-        return;
+    const filePath = path.parse(filename);
+    filename = filePath.name.replace(/\./g, '_');
+    // const symbolName = symbols[symbols.length-1];
+    // if(!symbolName){
+    //     return;
+    // }
+    let symbolClient;
+    if (symbols.includes(filename + requestStr)) {
+        symbolClient = generator.getSchemaForSymbol(filename + requestStr);
     }
-    const symbol = generator.getSchemaForSymbol(symbolName);
+    let client;
+    let server;
+    if (symbolClient) {
+        const messages = {};
+        client = parseSymbol(symbolClient, symbolClient, messages);
+    }
+    let symbolServer;
+    if (symbols.includes(filename + responseStr)) {
+        if (!client) {
+            console.warn('WARNING:', filename, `has ${responseStr} without ${requestStr}`);
+        }
+        symbolServer = generator.getSchemaForSymbol(filename + responseStr);
+    }
+    if (!symbolServer) {
+        if (client) {
+            console.warn('WARNING:', filename, `has ${requestStr} without ${responseStr}`);
+        }
+        symbolServer = generator.getSchemaForSymbol(filename);
+    }
     const messages = {};
-    return parseSymbol(symbol, symbol, messages);
+    server = parseSymbol(symbolServer, symbolServer, messages);
+    return { client: client, server: server };
     //   return transMessage(obj,messages);
 }
 const PROTOBUF_TYPES = [
