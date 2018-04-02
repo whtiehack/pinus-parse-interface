@@ -20,7 +20,7 @@ function error(msg,...args){
 let responseStr = '_Res';
 let requestStr = '_Req';
 
-export function parseToPinusProtobuf(baseDir:string,reqStr='_Req',resStr='_Res'): object{
+export function parseToPinusProtobuf(baseDir:string,reqStr='_Req',resStr='_Res'): {client:object,server:object}{
     responseStr = resStr;
     requestStr = reqStr;
     let retObj = {client:{},server:{}};
