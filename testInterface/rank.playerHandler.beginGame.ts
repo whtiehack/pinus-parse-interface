@@ -6,7 +6,13 @@
   },
  */
 
-export interface rank_PlayerHandler_beginGame{
+
+export interface rank_playerHandler_beginGame_Req{
+    token:number;
+    msg?:string;
+}
+
+export interface rank_playerHandler_beginGame_Res{
     /**
      * @TJS-type uInt32
      */

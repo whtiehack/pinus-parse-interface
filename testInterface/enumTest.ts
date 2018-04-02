@@ -11,7 +11,7 @@ enum EnumTestSTR{
     DD ='cc',
 }
 
-export interface EnumTest{
+export interface enumTest{
     aa?:string;
     bb:number;
     /**

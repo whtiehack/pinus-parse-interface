@@ -9,7 +9,7 @@
 //     "repeated Array ranks": 1
 // },
 
-import {GGG, MyRank} from "../share/myrank";
+import {GGG, MyRank} from "./share/myrank";
 
 
 interface IGG{

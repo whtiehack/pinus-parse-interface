@@ -17,8 +17,13 @@ function error(msg,...args){
     throw new Error(str);
 }
 
-export function parseToPinusProtobuf(baseDir:string): object{
-    let retObj = {};
+let responseStr = '_Res';
+let requestStr = '_Req';
+
+export function parseToPinusProtobuf(baseDir:string,reqStr='_Req',resStr='_Res'): object{
+    responseStr = resStr;
+    requestStr = reqStr;
+    let retObj = {client:{},server:{}};
     const files = fs.readdirSync(baseDir);
     files.forEach(val=>{
         if(!val.endsWith('.ts')){
@@ -26,7 +31,8 @@ export function parseToPinusProtobuf(baseDir:string): object{
         }
         const obj = parseFile(baseDir,val);
         const tmp = path.parse(val);
-        retObj[tmp.name] = obj;
+        retObj.client[tmp.name] = obj.client;
+        retObj.server[tmp.name] = obj.server;
     });
     return retObj;
 }
@@ -49,13 +55,39 @@ function parseFile(baseDir:string,filename:string){
     if(!symbols || !symbols.length){
         return;
     }
-    const symbolName = symbols[symbols.length-1];
-    if(!symbolName){
-        return;
+    const filePath = path.parse(filename);
+    filename = filePath.name.replace(/\./g,'_');
+    // const symbolName = symbols[symbols.length-1];
+    // if(!symbolName){
+    //     return;
+    // }
+
+    let  symbolClient;
+    if(symbols.includes(filename+requestStr)){
+        symbolClient = generator.getSchemaForSymbol(filename+requestStr);
     }
-    const symbol = generator.getSchemaForSymbol(symbolName);
+    let client;
+    let server;
+    if(symbolClient){
+        const messages = {};
+        client =  parseSymbol(symbolClient,symbolClient,messages);
+    }
+    let symbolServer;
+    if(symbols.includes(filename+responseStr)){
+        if(!client){
+            console.warn('WARNING:',filename,`has ${responseStr} without ${requestStr}`);
+        }
+        symbolServer = generator.getSchemaForSymbol(filename+responseStr);
+    }
+    if(!symbolServer){
+        if(client){
+            console.warn('WARNING:',filename,`has ${requestStr} without ${responseStr}`);
+        }
+        symbolServer = generator.getSchemaForSymbol(filename);
+    }
     const messages = {};
-    return parseSymbol(symbol,symbol,messages);
+    server =  parseSymbol(symbolServer,symbolServer,messages);
+    return {client:client,server:server};
  //   return transMessage(obj,messages);
 }
 
