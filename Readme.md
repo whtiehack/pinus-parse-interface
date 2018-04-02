@@ -36,19 +36,7 @@ it can also be used on the `pomelo-protobuf` declaration file(serverProtos.json,
 
 input
 ```
-
-export interface rank_PlayerHandler_beginGame{
-    /**
-     * @TJS-type uInt32
-     */
-    code?:number;
-    msg?:string;
-    /**
-     * @TJS-type uInt32
-     */
-    currank:number;
-}
-
+// onAdd.ts
 export interface onAdd{
     nickname:string;
     nickname11:number;
@@ -69,10 +57,28 @@ export interface onAdd{
 }
 
 
+// onRank.ts
 
 
+import {GGG, MyRank} from "../share/myrank";
 
-export interface onRank{
+
+interface IGG{
+    ggenv?:string[];
+}
+
+interface IFF{
+    ffname:string;
+    aa?:IGG[];
+}
+
+enum EnumTest{
+    AA,
+    BB,
+    CC
+}
+
+export interface onRank extends IFF,IGG{
     /**
      * The float of the nowplayers.
      *
@@ -80,13 +86,32 @@ export interface onRank{
      * @TJS-type array
      */
     normalArr:number[];
-
+    /**
+     * @TJS-type uInt32
+     */
+    enum:EnumTest;
     normalStrArr:string[];
-
+    innerGGG?:GGG;
     ranks:MyRank[];
     rk?:MyRank;
     val?:number;
 }
+
+// rank.playerHandler.beginGame.ts
+
+export interface rank_PlayerHandler_beginGame{
+    /**
+     * @TJS-type uInt32
+     */
+    code?:number;
+    msg?:string;
+    /**
+     * @TJS-type uInt32
+     */
+    currank:number;
+}
+
+
 
 ```
 
@@ -97,30 +122,42 @@ output
 ```
 {
     "onAdd": {
-        "required string nickname": 0,
-        "required uInt32 nickname11": 1,
-        "required uInt32 nowplayers": 2,
-        "required float nowplayers2": 3,
-        "required double nowplayers3": 4
+        "required string nickname": 1,
+        "required uInt32 nickname11": 2,
+        "required uInt32 nowplayers": 3,
+        "required float nowplayers2": 4,
+        "required double nowplayers3": 5
     },
     "onRank": {
-        "repeated uInt32 normalArr": 0,
-        "repeated string normalStrArr": 1,
-        "message MyRank": {
-            "required uInt32 nickname": 0,
-            "message GGG": {
-                "required uInt32 ccgg": 0
-            },
-            "required GGG ggg": 1
+        "repeated uInt32 normalArr": 1,
+        "required uInt32 enum": 2,
+        "repeated string normalStrArr": 3,
+        "message GGG": {
+            "required uInt32 ccgg": 1
         },
-        "repeated MyRank ranks": 2,
-        "optional MyRank rk": 3,
-        "optional uInt32 val": 4
+        "optional GGG innerGGG": 4,
+        "message MyRank": {
+            "required uInt32 nickname": 1,
+            "message GGG": {
+                "required uInt32 ccgg": 1
+            },
+            "required GGG ggg": 2,
+            "required GGG xxx": 3
+        },
+        "repeated MyRank ranks": 5,
+        "optional MyRank rk": 6,
+        "optional uInt32 val": 7,
+        "required string ffname": 8,
+        "message IGG": {
+            "repeated string ggenv": 1
+        },
+        "repeated IGG aa": 9,
+        "repeated string ggenv": 10
     },
     "rank.playerHandler.beginGame": {
-        "optional uInt32 code": 0,
-        "optional string msg": 1,
-        "required uInt32 currank": 2
+        "optional uInt32 code": 1,
+        "optional string msg": 2,
+        "required uInt32 currank": 3
     }
 }
 ```

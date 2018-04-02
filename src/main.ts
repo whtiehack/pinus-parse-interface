@@ -185,7 +185,7 @@ function parseSymbol(root:Definition,symbol:Definition,messages:object){
         return ' ' +name+' '+key;
     }
     let val = {};
-    let i = 0;
+    let i = 1;
     for(let key in symbol.properties){
         const prop = <IProp>symbol.properties[key];
         let msgkey = 'optional';
