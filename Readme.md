@@ -6,7 +6,12 @@
 
 pinus: https://github.com/node-pinus/pinus
 
+## changelog
+```
+v0.1.3:
+修复interface成员全部为可选时会出错的bug。
 
+```
 ## install
 
 `npm install pinus-parse-interface`

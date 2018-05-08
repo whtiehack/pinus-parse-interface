@@ -205,7 +205,7 @@ function parseSymbol(root, symbol, messages) {
         if (prop.type == 'array') {
             msgkey = 'repeated';
         }
-        else if (symbol.required.includes(key)) {
+        else if (symbol.required && symbol.required.includes(key)) {
             msgkey = 'required';
         }
         // 判断类型  type items additionalProperties
