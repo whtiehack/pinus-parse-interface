@@ -20,19 +20,17 @@ function parseToPinusProtobuf(baseDir, reqStr = '_Req', resStr = '_Res') {
     requestStr = reqStr;
     let retObj = { client: {}, server: {} };
     const files = fs.readdirSync(baseDir);
+    const tsFilePaths = [];
     files.forEach(val => {
         if (!val.endsWith('.ts')) {
             return;
         }
-        const obj = parseFile(baseDir, val);
-        const tmp = path.parse(val);
-        retObj.client[tmp.name] = obj.client;
-        retObj.server[tmp.name] = obj.server;
+        tsFilePaths.push(path_1.resolve(baseDir + '/' + val));
+        // const obj = parseFile(baseDir,val);
+        // const tmp = path.parse(val);
+        // retObj.client[tmp.name] = obj.client;
+        // retObj.server[tmp.name] = obj.server;
     });
-    return retObj;
-}
-exports.parseToPinusProtobuf = parseToPinusProtobuf;
-function parseFile(baseDir, filename) {
     // optionally pass argument to schema generator
     const settings = {
         required: true
@@ -41,10 +39,23 @@ function parseFile(baseDir, filename) {
     const compilerOptions = {
         strictNullChecks: true
     };
-    const program = TJS.getProgramFromFiles([path_1.resolve(baseDir + '/' + filename)], compilerOptions, baseDir);
+    const program = TJS.getProgramFromFiles(tsFilePaths, compilerOptions, baseDir);
     const generator = TJS.buildGenerator(program, settings);
     // all symbols
     const symbols = generator.getMainFileSymbols(program);
+    files.forEach(val => {
+        if (!val.endsWith('.ts')) {
+            return;
+        }
+        const obj = parseFile(baseDir, val, program, generator, symbols);
+        const tmp = path.parse(val);
+        retObj.client[tmp.name] = obj.client;
+        retObj.server[tmp.name] = obj.server;
+    });
+    return retObj;
+}
+exports.parseToPinusProtobuf = parseToPinusProtobuf;
+function parseFile(baseDir, filename, program, generator, symbols) {
     if (!symbols || !symbols.length) {
         return;
     }

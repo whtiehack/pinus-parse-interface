@@ -8,6 +8,9 @@ pinus: https://github.com/node-pinus/pinus
 
 ## changelog
 ```
+v0.1.5:
+文件统一解析。 加快解析速度
+
 v0.1.3:
 修复interface成员全部为可选时会出错的bug。
 

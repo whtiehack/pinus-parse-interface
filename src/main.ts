@@ -6,6 +6,7 @@ import * as fs from 'fs';
 import {Definition} from "typescript-json-schema";
 import * as util from 'util';
 import * as path from 'path';
+import {JsonSchemaGenerator} from "typescript-json-schema";
 
 function log(...args){
     console.log(...args);
@@ -25,19 +26,18 @@ export function parseToPinusProtobuf(baseDir:string,reqStr='_Req',resStr='_Res')
     requestStr = reqStr;
     let retObj = {client:{},server:{}};
     const files = fs.readdirSync(baseDir);
+    const tsFilePaths:string[] = [];
     files.forEach(val=>{
         if(!val.endsWith('.ts')){
             return;
         }
-        const obj = parseFile(baseDir,val);
-        const tmp = path.parse(val);
-        retObj.client[tmp.name] = obj.client;
-        retObj.server[tmp.name] = obj.server;
+        tsFilePaths.push(resolve(baseDir+'/'+val));
+        // const obj = parseFile(baseDir,val);
+        // const tmp = path.parse(val);
+        // retObj.client[tmp.name] = obj.client;
+        // retObj.server[tmp.name] = obj.server;
     });
-    return retObj;
-}
 
-function parseFile(baseDir:string,filename:string){
     // optionally pass argument to schema generator
     const settings: TJS.PartialArgs = {
         required: true
@@ -47,11 +47,24 @@ function parseFile(baseDir:string,filename:string){
     const compilerOptions: TJS.CompilerOptions = {
         strictNullChecks: true
     };
-    const program = TJS.getProgramFromFiles([resolve(baseDir+'/'+filename)], compilerOptions, baseDir);
+    const program = TJS.getProgramFromFiles(tsFilePaths, compilerOptions, baseDir);
     const generator = TJS.buildGenerator(program, settings);
     // all symbols
 
     const symbols = generator.getMainFileSymbols(program);
+    files.forEach(val=>{
+        if(!val.endsWith('.ts')){
+            return;
+        }
+        const obj = parseFile(baseDir,val,program,generator,symbols);
+        const tmp = path.parse(val);
+        retObj.client[tmp.name] = obj.client;
+        retObj.server[tmp.name] = obj.server;
+    });
+    return retObj;
+}
+
+function parseFile(baseDir:string,filename:string,program:TJS.Program,generator:JsonSchemaGenerator,symbols:string[]){
     if(!symbols || !symbols.length){
         return;
     }
