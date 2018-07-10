@@ -8,6 +8,9 @@ pinus: https://github.com/node-pinus/pinus
 
 ## changelog
 ```
+v0.1.6:
+支持 notify 消息。可以没有Response.
+
 v0.1.5:
 文件统一解析。 加快解析速度
 

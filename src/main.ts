@@ -94,9 +94,14 @@ function parseFile(baseDir:string,filename:string,program:TJS.Program,generator:
     }
     if(!symbolServer){
         if(client){
-            console.warn('WARNING:',filename,`has ${requestStr} without ${responseStr}`);
+         //   console.warn('WARNING:',filename,`has ${requestStr} without ${responseStr}`);
         }
-        symbolServer = generator.getSchemaForSymbol(filename);
+        if(symbols.includes(filename)){
+            symbolServer = generator.getSchemaForSymbol(filename);
+        }
+    }
+    if(!symbolServer){
+        return {client:client};
     }
     const messages = {};
     server =  parseSymbol(symbolServer,symbolServer,messages);
