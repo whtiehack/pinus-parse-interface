@@ -28,6 +28,6 @@
     "protobuf"
   ],
   "devDependencies": {
-    "ts-node": "5.0.1"
+    "ts-node": "8.0.3"
   }
 }
