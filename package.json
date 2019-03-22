@@ -3,7 +3,7 @@
   "version": "0.1.6",
   "dependencies": {
     "@types/node": "^9.6.1",
-    "typescript": "^2.8.1",
+    "typescript": "^3.0.0",
     "typescript-json-schema": "^0.36.0"
   },
   "homepage": "https://github.com/whtiehack/pinus-parse-interface",
