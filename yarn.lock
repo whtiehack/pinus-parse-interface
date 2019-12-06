@@ -221,9 +221,9 @@ ts-node@8.5.4:
     source-map-support "^0.5.6"
     yn "^3.0.0"
 
-typescript-json-schema@^0.40.0:
-  version "0.40.0"
-  resolved "https://registry.yarnpkg.com/typescript-json-schema/-/typescript-json-schema-0.40.0.tgz#4815092e5acf1662a94aa140924809ff5922da7c"
+typescript-json-schema@^0.41.0:
+  version "0.41.0"
+  resolved "https://registry.yarnpkg.com/typescript-json-schema/-/typescript-json-schema-0.41.0.tgz#8dbe1798023ae50e803b3f9d53a6d10aaf5a9d74"
   dependencies:
     "@types/json-schema" "^7.0.3"
     glob "~7.1.4"
