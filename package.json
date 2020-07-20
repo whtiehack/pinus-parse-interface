@@ -3,7 +3,7 @@
   "version": "0.1.6",
   "dependencies": {
     "@types/node": "^9.6.1",
-    "typescript": "^3.0.0",
+    "typescript": "^3.5.3",
     "typescript-json-schema": "^0.42.0"
   },
   "homepage": "https://github.com/whtiehack/pinus-parse-interface",
@@ -12,7 +12,7 @@
     "url": "https://github.com/whtiehack/pinus-parse-interface.git"
   },
   "engines": {
-    "node":">=8"
+    "node": ">=8"
   },
   "main": "./dist/index",
   "types": "./src/index",
