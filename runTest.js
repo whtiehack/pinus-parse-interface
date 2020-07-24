@@ -151,6 +151,7 @@ if (process.env['NODE_ENV'] === 'ci') {
         console.error(JSON.stringify(test), "compare:", compare)
         throw new Error("error")
     }
+    console.log("test passed")
 }
 
 
