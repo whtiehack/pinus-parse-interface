@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+const path = require("path");
 const path_1 = require("path");
 const TJS = require("typescript-json-schema");
 const fs = require("fs");
 const util = require("util");
-const path = require("path");
 function log(...args) {
     console.log(...args);
 }
@@ -15,9 +15,18 @@ function error(msg, ...args) {
 }
 let responseStr = '_Res';
 let requestStr = '_Req';
-function parseToPinusProtobuf(baseDir, reqStr = '_Req', resStr = '_Res') {
+let MergeMessage = false;
+/**
+ *
+ * @param baseDir
+ * @param reqStr
+ * @param resStr
+ * @param mergeMessage message 结构放到顶层 (默认的客户端不支持,需要修改客户端)
+ */
+function parseToPinusProtobuf(baseDir, reqStr = '_Req', resStr = '_Res', mergeMessage = false) {
     responseStr = resStr;
     requestStr = reqStr;
+    MergeMessage = mergeMessage;
     let retObj = { client: {}, server: {} };
     const files = fs.readdirSync(baseDir);
     const tsFilePaths = [];
@@ -43,19 +52,33 @@ function parseToPinusProtobuf(baseDir, reqStr = '_Req', resStr = '_Res') {
     const generator = TJS.buildGenerator(program, settings);
     // all symbols
     const symbols = generator.getMainFileSymbols(program);
+    let clientMessages = {};
+    let serverMessages = {};
     files.forEach(val => {
         if (!val.endsWith('.ts')) {
             return;
         }
-        const obj = parseFile(baseDir, val, program, generator, symbols);
+        if (!mergeMessage) {
+            clientMessages = {};
+            serverMessages = {};
+        }
+        const obj = parseFile(baseDir, val, program, generator, symbols, clientMessages, serverMessages);
         const tmp = path.parse(val);
         retObj.client[tmp.name] = obj.client;
         retObj.server[tmp.name] = obj.server;
     });
+    if (mergeMessage) {
+        for (let k in clientMessages) {
+            retObj.client['message ' + k] = clientMessages[k];
+        }
+        for (let k in serverMessages) {
+            retObj.server['message ' + k] = serverMessages[k];
+        }
+    }
     return retObj;
 }
 exports.parseToPinusProtobuf = parseToPinusProtobuf;
-function parseFile(baseDir, filename, program, generator, symbols) {
+function parseFile(baseDir, filename, program, generator, symbols, clientMessages, serverMessages) {
     if (!symbols || !symbols.length) {
         return;
     }
@@ -72,8 +95,7 @@ function parseFile(baseDir, filename, program, generator, symbols) {
     let client;
     let server;
     if (symbolClient) {
-        const messages = {};
-        client = parseSymbol(symbolClient, symbolClient, messages);
+        client = parseSymbol(symbolClient, symbolClient, clientMessages);
     }
     let symbolServer;
     if (symbols.includes(filename + responseStr)) {
@@ -93,8 +115,7 @@ function parseFile(baseDir, filename, program, generator, symbols) {
     if (!symbolServer) {
         return { client: client };
     }
-    const messages = {};
-    server = parseSymbol(symbolServer, symbolServer, messages);
+    server = parseSymbol(symbolServer, symbolServer, serverMessages);
     return { client: client, server: server };
     //   return transMessage(obj,messages);
 }
@@ -115,7 +136,7 @@ function getDefinitionFromRoot(root, ref) {
     if (!ret) {
         error('!find definition from root error', root, ret);
     }
-    ret.name = name;
+    ret['name'] = name;
     return ret;
 }
 function normalType(typeName) {
@@ -209,7 +230,9 @@ function parseSymbol(root, symbol, messages) {
         if (!messages[name]) {
             messages[name] = parseSymbol(root, definition, messages);
         }
-        obj['message ' + name] = messages[name];
+        if (!MergeMessage) {
+            obj['message ' + name] = messages[name];
+        }
         return ' ' + name + ' ' + key;
     }
     let val = {};

@@ -38,6 +38,14 @@ const test = main.parseToPinusProtobuf('path_to_you_interface_dir');
 console.log('result',JSON.stringify(test,null,4));
 ```
 
+合并所有的message到顶层
+
+```
+// 第四个参数表示把所有的message结构放到顶层 (默认的客户端不支持,需要修改客户端)
+main.parseToPinusProtobuf('path_to_you_interface_dir','_Req','_Res',true);
+```
+
+
 ## interface 结构约定
 1. 以文件名为消息名。
 1. 客户端与服务端的结构放到一起。
