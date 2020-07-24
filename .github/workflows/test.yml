@@ -5,7 +5,7 @@ on:
 
 jobs:
   test:
-    runs-on: unbuntu-latest
+    runs-on: ubuntu-latest
     env:
       NODE_ENV: ci
     steps:
