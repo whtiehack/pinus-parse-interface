@@ -1,3 +1,5 @@
+![test-parse](https://github.com/whtiehack/pinus-parse-interface/workflows/test-parse/badge.svg)
+
 
 ####  parse TS interface to pinus-protobuf JSON 
 解析  ts 的interface 到 pinus-protobuf用的 json格式。

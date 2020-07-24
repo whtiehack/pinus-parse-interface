@@ -17,10 +17,19 @@ function error(msg, ...args) {
 
 let responseStr = '_Res';
 let requestStr = '_Req';
+let MergeMessage = false
 
-export function parseToPinusProtobuf(baseDir: string, reqStr = '_Req', resStr = '_Res'): { client: object, server: object } {
+/**
+ *
+ * @param baseDir
+ * @param reqStr
+ * @param resStr
+ * @param mergeMessage message 结构放到顶层 (默认的客户端不支持,需要修改客户端)
+ */
+export function parseToPinusProtobuf(baseDir: string, reqStr = '_Req', resStr = '_Res', mergeMessage = false): { client: object, server: object } {
     responseStr = resStr;
     requestStr = reqStr;
+    MergeMessage = mergeMessage
     let retObj = { client: {}, server: {} };
     const files = fs.readdirSync(baseDir);
     const tsFilePaths: string[] = [];
@@ -49,19 +58,33 @@ export function parseToPinusProtobuf(baseDir: string, reqStr = '_Req', resStr = 
     // all symbols
 
     const symbols = generator.getMainFileSymbols(program);
+    let clientMessages = {}
+    let serverMessages = {}
     files.forEach(val => {
         if (!val.endsWith('.ts')) {
             return;
         }
-        const obj = parseFile(baseDir, val, program, generator, symbols);
+        if (!mergeMessage) {
+            clientMessages = {}
+            serverMessages = {}
+        }
+        const obj = parseFile(baseDir, val, program, generator, symbols, clientMessages, serverMessages);
         const tmp = path.parse(val);
         retObj.client[tmp.name] = obj.client;
         retObj.server[tmp.name] = obj.server;
     });
+    if (mergeMessage) {
+        for (let k in clientMessages) {
+            retObj.client['message ' + k] = clientMessages[k]
+        }
+        for (let k in serverMessages) {
+            retObj.server['message ' + k] = serverMessages[k]
+        }
+    }
     return retObj;
 }
 
-function parseFile(baseDir: string, filename: string, program: TJS.Program, generator: JsonSchemaGenerator, symbols: string[]) {
+function parseFile(baseDir: string, filename: string, program: TJS.Program, generator: JsonSchemaGenerator, symbols: string[], clientMessages, serverMessages) {
     if (!symbols || !symbols.length) {
         return;
     }
@@ -79,8 +102,7 @@ function parseFile(baseDir: string, filename: string, program: TJS.Program, gene
     let client;
     let server;
     if (symbolClient) {
-        const messages = {};
-        client = parseSymbol(symbolClient, symbolClient, messages);
+        client = parseSymbol(symbolClient, symbolClient, clientMessages);
     }
     let symbolServer;
     if (symbols.includes(filename + responseStr)) {
@@ -100,8 +122,7 @@ function parseFile(baseDir: string, filename: string, program: TJS.Program, gene
     if (!symbolServer) {
         return { client: client };
     }
-    const messages = {};
-    server = parseSymbol(symbolServer, symbolServer, messages);
+    server = parseSymbol(symbolServer, symbolServer, serverMessages);
     return { client: client, server: server };
     //   return transMessage(obj,messages);
 }
@@ -228,7 +249,9 @@ function parseSymbol(root: Definition, symbol: Definition, messages: object) {
         if (!messages[name]) {
             messages[name] = parseSymbol(root, definition, messages);
         }
-        obj['message ' + name] = messages[name];
+        if (!MergeMessage) {
+            obj['message ' + name] = messages[name];
+        }
         return ' ' + name + ' ' + key;
     }
 

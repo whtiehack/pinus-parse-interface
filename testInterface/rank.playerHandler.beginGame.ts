@@ -6,20 +6,29 @@
   },
  */
 
+// duplicate IGG name
+import { GGG } from "./share/myrank";
 
-export interface rank_playerHandler_beginGame_Req{
-    token:number;
-    msg?:string;
+interface IGG {
+    ggenv?: string[];
+    zz?: number;
 }
 
-export interface rank_playerHandler_beginGame_Res{
+export interface rank_playerHandler_beginGame_Req {
+    token: number;
+    msg?: string;
+    duplicateIgg?: IGG
+    sharewithServerused?: GGG
+}
+
+export interface rank_playerHandler_beginGame_Res {
     /**
      * @TJS-type uInt32
      */
-    code?:number;
-    msg?:string;
+    code?: number;
+    msg?: string;
     /**
      * @TJS-type uInt32
      */
-    currank:number;
+    currank: number;
 }
