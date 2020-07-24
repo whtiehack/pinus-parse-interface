@@ -10,6 +10,9 @@ pinus: https://github.com/node-pinus/pinus
 
 ## changelog
 ```
+v0.2.1:
+支持 结构放到顶层 (默认的客户端不支持,需要修改客户端)
+
 v0.1.6:
 支持 notify 消息。可以没有Response.
 
