@@ -10,6 +10,9 @@ pinus: https://github.com/node-pinus/pinus
 
 ## changelog
 ```
+v0.2.2: 
+生成的消息做排序
+
 v0.2.1:
 支持 结构放到顶层 (默认的客户端不支持,需要修改客户端)
 

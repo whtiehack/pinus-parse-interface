@@ -73,15 +73,51 @@ export function parseToPinusProtobuf(baseDir: string, reqStr = '_Req', resStr = 
         retObj.client[tmp.name] = obj.client;
         retObj.server[tmp.name] = obj.server;
     });
+    retObj.client = sortMsg(retObj.client)
+    retObj.server = sortMsg(retObj.server)
     if (mergeMessage) {
+        let obj = {}
         for (let k in clientMessages) {
-            retObj.client['message ' + k] = clientMessages[k]
+            obj['message ' + k] = clientMessages[k]
         }
+        obj = sortMsg(obj)
+        for (let k in obj) {
+            retObj.client[k] = obj[k]
+        }
+        obj = {}
         for (let k in serverMessages) {
-            retObj.server['message ' + k] = serverMessages[k]
+            obj['message ' + k] = serverMessages[k]
+        }
+        obj = sortMsg(obj)
+        for (let k in obj) {
+            retObj.server[k] = obj[k]
         }
     }
     return retObj;
+}
+
+function sortMsg(obj) {
+    let arr: { k: string, v: object }[] = []
+    for (let k in obj) {
+        arr.push({ k: k, v: obj[k] })
+    }
+    arr.sort((a, b) => {
+        if (a.k.includes('.')) {
+            if (b.k.includes('.')) {
+                return a.k > b.k ? 1 : -1
+            }
+            return -1
+        }
+        if (b.k.includes('.')) {
+            return 1
+        }
+        return -1
+    })
+    let newObj = {}
+    for (let v of arr) {
+        newObj[v.k] = v.v
+    }
+    return newObj
 }
 
 function parseFile(baseDir: string, filename: string, program: TJS.Program, generator: JsonSchemaGenerator, symbols: string[], clientMessages, serverMessages) {
