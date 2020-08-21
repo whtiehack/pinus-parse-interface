@@ -10,6 +10,9 @@ pinus: https://github.com/node-pinus/pinus
 
 ## changelog
 ```
+v0.2.3:
+fix sort method.
+
 v0.2.2: 
 生成的消息做排序
 

@@ -1,6 +1,6 @@
 {
   "name": "pinus-parse-interface",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "dependencies": {
     "@types/node": "^9.6.1",
     "typescript": "^3.5.3",

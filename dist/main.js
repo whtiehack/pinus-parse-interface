@@ -105,7 +105,7 @@ function sortMsg(obj) {
         if (b.k.includes('.')) {
             return 1;
         }
-        return -1;
+        return a.k > b.k ? 1 : -1;
     });
     let newObj = {};
     for (let v of arr) {
