@@ -27,6 +27,11 @@ let compare = JSON.stringify({
         }
     },
     "server": {
+        "rank.playerHandler.beginGame": {
+            "optional uInt32 code": 1,
+            "optional string msg": 2,
+            "required uInt32 currank": 3
+        },
         "enumTest": {
             "optional string aa": 1,
             "required uInt32 bb": 2,
@@ -65,11 +70,6 @@ let compare = JSON.stringify({
             },
             "repeated IGG aa": 9,
             "repeated string ggenv": 10
-        },
-        "rank.playerHandler.beginGame": {
-            "optional uInt32 code": 1,
-            "optional string msg": 2,
-            "required uInt32 currank": 3
         }
     }
 })
@@ -95,15 +95,20 @@ if (process.env['NODE_ENV'] === 'ci') {
                 "required uInt32 token": 1,
                 "optional string msg": 2
             },
+            "message GGG": {
+                "required uInt32 ccgg": 1
+            },
             "message IGG_1": {
                 "repeated string ggenv": 1,
                 "optional uInt32 zz": 2
-            },
-            "message GGG": {
-                "required uInt32 ccgg": 1
             }
         },
         "server": {
+            "rank.playerHandler.beginGame": {
+                "optional uInt32 code": 1,
+                "optional string msg": 2,
+                "required uInt32 currank": 3
+            },
             "enumTest": {
                 "optional string aa": 1,
                 "required uInt32 bb": 2,
@@ -129,21 +134,16 @@ if (process.env['NODE_ENV'] === 'ci') {
                 "repeated IGG aa": 9,
                 "repeated string ggenv": 10
             },
-            "rank.playerHandler.beginGame": {
-                "optional uInt32 code": 1,
-                "optional string msg": 2,
-                "required uInt32 currank": 3
-            },
             "message GGG": {
                 "required uInt32 ccgg": 1
+            },
+            "message IGG": {
+                "repeated string ggenv": 1
             },
             "message MyRank": {
                 "required uInt32 nickname": 1,
                 "required GGG ggg": 2,
                 "required GGG xxx": 3
-            },
-            "message IGG": {
-                "repeated string ggenv": 1
             }
         }
     })
