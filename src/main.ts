@@ -283,6 +283,7 @@ function parseSymbol(root: Definition, symbol: Definition, messages: object) {
             return ' ' + type + ' ' + key;
         }
         if (!messages[name]) {
+            messages[name]={};
             messages[name] = parseSymbol(root, definition, messages);
         }
         if (!MergeMessage) {
